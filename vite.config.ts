@@ -3,10 +3,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-// No GitHub Pages o site fica em https://<usuario>.github.io/<repositorio>/
-// O workflow define BASE_PATH=/<repositorio>/ automaticamente.
+// Todos os arquivos estão na raiz do repositório: os caminhos "@/..." apontam para a raiz.
 export default defineConfig({
   base: process.env.BASE_PATH ?? "/",
   plugins: [react(), tailwindcss()],
-  resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
+  resolve: {
+    alias: [
+      { find: /^@\/(?:components\/ui|components|pages|hooks|lib)\//, replacement: path.resolve(__dirname) + "/" },
+      { find: /^@\//, replacement: path.resolve(__dirname) + "/" },
+    ],
+  },
 });
